@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-"title": "Strictly Style",
-"author": "Hanna Vayrynen",
-"url": "www.hannavayrynen.com",
-"likes": 1
+"title": "Testi Blogi",
+"author": "Kirjoittaja",
+"url": "www.bloginen.com",
+"likes": 3
 }
