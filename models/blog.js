@@ -21,8 +21,9 @@ const blogSchema = mongoose.Schema({
   }
 })
 
-// set (add) 'toJSON' property (which is a function)
-// toJSON is called via JSON.stringify and it customizes the method call
+// set=add 'toJSON' property (which is a function)
+// res.json calls JSON.stringify() method
+// .toJSON() customizes the method call
 // here the result is id in String format and _v removed
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
