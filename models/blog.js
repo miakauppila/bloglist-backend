@@ -1,12 +1,24 @@
 const mongoose = require('mongoose')
 
 const blogSchema = mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
+    title: {
+        type: String,
+        required: true,
+    },
+    author: {
+        type: String,
+    },
+    url: {
+        type: String,
+        required: true,
+    },
+    likes: {
+        type: Number
+    }
 })
 
+// add toJSON property (function) 
+// toJSON is called via JSON.stringify and customizes the method call
 blogSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()

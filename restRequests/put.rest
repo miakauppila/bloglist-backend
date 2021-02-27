@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{
+"title": "Muokattu Bloginimi",
+"author": "Kirjoittaja",
+"url": "www.bloginen.com",
+"likes": 33
+}
