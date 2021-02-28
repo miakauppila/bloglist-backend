@@ -14,21 +14,39 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.message)
+  logger.info(error.message)
 
-  // get eg.: /api/blogs/wrongId
+  // get: /api/blogs/wrongId
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-    // post eg.: /api/blogs/id
-  } else if (error.name === 'ValidationError') {
+  }
+  // post: /api/users
+  else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
-
+  // post: api/blogs
+  else if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({ error: error.message })
+  }
   next(error)
+}
+
+const tokenExtractor = (request, response, next) => {
+  // get the content of Authorization in the header
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    //extract actual token (from position7 until the end of string)
+    request.token = authorization.substring(7)
+  }
+  else {
+    request.token = null
+  }
+  next()
 }
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
-  errorHandler
+  errorHandler,
+  tokenExtractor
 }

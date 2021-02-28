@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer y111
 
 {
-"title": "Uudempi Testi Blogi",
+"title": "Token Testi Blogi",
 "author": "Kirjoittaja",
-"url": "www.bloginen.com",
-"likes": 3,
-"userId": "603a295c51e3c2a93826367d"
+"url": "www.tokenrequired.com",
+"likes": 33
 }

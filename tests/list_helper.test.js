@@ -31,7 +31,7 @@ const listWithManyBlogs = [
     title: 'Go To Statement Considered Harmful',
     author: 'Edsger W. Dijkstra',
     url:
-            'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
     __v: 0,
   },
@@ -48,7 +48,7 @@ const listWithManyBlogs = [
     title: 'First class tests',
     author: 'Robert C. Martin',
     url:
-            'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+      'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
     __v: 0,
   },
@@ -57,7 +57,7 @@ const listWithManyBlogs = [
     title: 'TDD harms architecture',
     author: 'Robert C. Martin',
     url:
-            'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+      'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
     __v: 0,
   },
@@ -113,6 +113,62 @@ describe('favorite blog', () => {
   })
   test('of empty list returns null', () => {
     const result = listHelper.favoriteBlog(listWithZeroBlogs)
+    expect(result).toBe(null)
+  })
+
+})
+
+describe('author with the most blogs', () => {
+  const mostBlogsOnlyOne = {
+    author: 'Edsger W. Dijkstra',
+    blogs: 1
+  }
+
+  const mostBlogsFromManyCorrectResult = {
+    author: 'Robert C. Martin',
+    blogs: 3
+  }
+
+  test('only one blog on the list and result is the author of that one', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual(mostBlogsOnlyOne)
+  })
+
+  test('many blogs on the list and finds the author with most blogs', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
+    expect(result).toEqual(mostBlogsFromManyCorrectResult)
+  })
+
+  test('of empty list returns null', () => {
+    const result = listHelper.mostBlogs(listWithZeroBlogs)
+    expect(result).toBe(null)
+  })
+
+})
+
+describe('author with the most likes in total', () => {
+  const mostLikesOnlyOne = {
+    author: 'Edsger W. Dijkstra',
+    likes: 5
+  }
+
+  const mostLikesFromManyCorrectResult = {
+    author: 'Edsger W. Dijkstra',
+    likes: 17
+  }
+
+  test('only one blog on the list and result is the author of that one', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual(mostLikesOnlyOne)
+  })
+
+  test('many blogs on the list and finds the author with most summed likes', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    expect(result).toEqual(mostLikesFromManyCorrectResult)
+  })
+
+  test('of empty list returns null', () => {
+    const result = listHelper.mostLikes(listWithZeroBlogs)
     expect(result).toBe(null)
   })
 
