@@ -31,7 +31,7 @@ app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
-// testingRouter is used to reset database in Cypress tests
+// testingRouter is used to reset test database in Cypress tests
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testingRouter')
   app.use('/api/testing', testingRouter)

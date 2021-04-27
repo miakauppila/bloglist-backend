@@ -237,7 +237,7 @@ describe('changing the data of a blog (PUT)', () => {
 
     const putResponse = await api
       .put(`/api/blogs/${blogToChange.id}`)
-      .send(correctedBlogData)
+      .send(changedBlogData)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
