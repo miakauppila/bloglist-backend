@@ -11,7 +11,7 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const body = request.body
+  const blog = new Blog(request.body)
   const token = request.token
   if (!token) {
     return response.status(401).json({ error: 'token missing' })
@@ -23,14 +23,13 @@ blogsRouter.post('/', async (request, response) => {
   }
   //search for the correct user
   const user = await User.findById(decodedToken.id)
+  // and set it as blog user
+  blog.user = user
 
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes === undefined ? 0 : body.likes,
-    user: user._id
-  })
+  // if likes were undefined in the request, set to 0
+  if (!blog.likes) {
+    blog.likes = 0
+  }
 
   const savedBlog = await blog.save()
   //add savedBlog to user's blogs array
@@ -60,7 +59,8 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
   else {
     await Blog.deleteOne(blog)
-    user.blogs = user.blogs.filter(blog => blog.id.toString() !== request.params.id.toString())
+    // user.blogs[x] is ObjectId
+    user.blogs = user.blogs.filter(objId => objId.toString() !== request.params.id.toString())
     await user.save()
     response.status(204).end() // no content returned
   }
@@ -74,6 +74,25 @@ blogsRouter.put('/:id', async (request, response) => {
   //mongoose options: new: true returns the document after update
   // omitUndefined: undefined fields in the request deleted and not sent
   response.status(200).json(updatedBlog)
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  // received commentObj {content: "some comment"}
+  const newComment = request.body
+
+  const blog = await Blog.findById(request.params.id)
+  //add new comment to blog's comments array
+  blog.comments.push(newComment)
+  console.log('blog after adding comment:', blog)
+  const savedBlog = await blog.save()
+  response.status(200).json(savedBlog)
+})
+
+// blog's comments resource
+blogsRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const comments = blog.comments
+  response.json(comments)
 })
 
 module.exports = blogsRouter

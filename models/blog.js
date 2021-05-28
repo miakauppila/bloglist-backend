@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+// creates an embedded subdocument schema
+const commentSchema = new mongoose.Schema({ content: String })
+
 const blogSchema = mongoose.Schema({
   title: {
     type: String,
@@ -15,6 +18,7 @@ const blogSchema = mongoose.Schema({
   likes: {
     type: Number
   },
+  comments: [commentSchema], // array of subdocuments
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -30,6 +34,12 @@ blogSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
+    if (returnedObject.comments) {
+      returnedObject.comments.map(comment => {
+        comment.id = comment._id
+        delete comment._id
+      })
+    }
   }
 })
 
