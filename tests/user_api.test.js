@@ -3,9 +3,13 @@ const helper = require('./api_test_helper')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
-
+const config = require('../utils/config')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+
+beforeAll(async () => {
+  await mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+})
 
 describe('when there is one initial user in the db', () => {
   // create initial user for all tests

@@ -2,11 +2,15 @@ const mongoose = require('mongoose')
 const helper = require('./api_test_helper')
 const supertest = require('supertest')
 const app = require('../app')
-
+const config = require('../utils/config')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+
+beforeAll(async () => {
+  await mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+})
 
 beforeEach(async () => {
   // create initial user
@@ -246,6 +250,30 @@ describe('changing the data of a blog (PUT)', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd[0]).toEqual(changedBlogData)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
+})
+
+describe('commenting a blog (POST)', () => {
+
+  test('a new comment is added', async () => {
+    //retrieves the blogs so id can be accessed
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToChange = blogsAtStart[0]
+    const commentObj = {
+      content: 'Adding a new comment'
+    }
+
+    const postResponse = await api
+      .post(`/api/blogs/${blogToChange.id}/comments`)
+      .send(commentObj)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(postResponse.body.comments[0].content).toBe('Adding a new comment')
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd[0].comments[0].content).toEqual('Adding a new comment')
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 

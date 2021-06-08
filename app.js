@@ -12,13 +12,18 @@ const mongoose = require('mongoose')
 
 logger.info('connecting to', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    logger.info('connected to MongoDB')
-  })
-  .catch((error) => {
-    logger.error('error connecting to MongoDB:', error.message)
-  })
+// Jest connection in each test file to avoid problems due to slow connection
+if(!global.__JEST__) {
+  mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      logger.info('connected to MongoDB')
+    })
+    .catch((error) => {
+      logger.error('error connecting to MongoDB:', error.message)
+    })
+}
+mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
 
 app.use(cors())
 app.use(express.static('build'))
