@@ -1,10 +1,10 @@
 # Bloglist application - Backend
 
-- Part 4 of the Full Stack Open course
+- Part 4 and 7 of the Full Stack Open course. 
 
-- This repo holds the backend of the Bloglist app.  
+- This repository holds the backend of the Bloglist app and runs on Heroku. Blogs and users collections are stored in Mongo database.   
 
-- <a href="https://github.com/miakauppila/bloglist-frontend" target="_blank">Click here for the frontend repo of this app</a>
+- Frontend deployed separately. <a href="https://github.com/miakauppila/bloglist-frontend" target="_blank">Click here for the frontend repo of this app.</a>
 
 ## Technologies used in this project:  
 - Node.js, Express  
